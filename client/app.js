@@ -1,4 +1,9 @@
+const target = document.querySelector('.target');
+const leaderBoard = document.querySelector('.leader-board');
+
 const drops = [];
+const currentUsers = {};
+let highScores = [];
 
 
 function createDropElement(url, isAvatar = false) {
@@ -14,7 +19,9 @@ function createDropElement(url, isAvatar = false) {
     return div;
 }
 
+//function doDrop({ username, url, isAvatar = false }) {
 function doDrop(url, isAvatar = false) {
+    //currentUsers[username] = true;
     const element = createDropElement(url, isAvatar);
     const drop = {
         id: Date.now() + Math.random(),
@@ -24,8 +31,8 @@ function doDrop(url, isAvatar = false) {
             y: -200,
         },
         velocity: {
-            x: Math.random() * (Math.random() > 0.5 ? -1 : 1) * 5,
-            y: 2 + Math.random() * 4
+            x: Math.random() * (Math.random() > 0.5 ? -1 : 1) * 10,
+            y: 2 + Math.random() * 3
         }
     };
 
@@ -43,6 +50,7 @@ function updateDropPosition(drop) {
 }
 
 function update() {
+    const targetHalfWidth = target.clientWidth / 2;
     drops.forEach(drop => {
         if (drop.landed) return;
         drop.location.x += drop.velocity.x;
@@ -58,10 +66,40 @@ function update() {
         if (drop.location.y + drop.element.clientHeight >= window.innerHeight) {
             drop.velocity.y = 0;
             drop.velocity.x = 0;
-            drop.location.y = drop.element.clientHeight + drop.location.y;
+            drop.location.y = window.innerHeight + drop.element.clientHeight;
             drop.landed = true;
+            drop.element.classList.add('landed');
+            const { x } = drop.location;
+            // const score = x => ((1 - Math.abs(window.innerWidth / 2 - x)) / window.innerWidth / 2) * 1000;
+            const score = Math.abs(window.innerWidth / 2 - x);
+            console.log('Calculated width', target.clientWidth);
+
+            if (score <= targetHalfWidth) {
+                console.log('Target hit!', drop);
+                const finalScore = (1 - (score / targetHalfWidth)) * 100;
+                console.log(finalScore);
+                leaderBoard.style.display = 'block';
+                // highScores.push({
+                //     username: drop.username,
+                //     score: finalScore
+                // });
+
+                //highScores.sort((a, b) => b.score - a.score);
+                //highScores = highScores.slice(0, 5);
+                //renderLeaderBoard();
+                //leaderBoard.appendChild(highScore);
+            }
+
         }
     });
+}
+
+
+function renderLeaderBoard() {
+    const scores = leaderBoard.querySelector('.scores');
+    scores.innerHTML = highScores.reduce((html, { score, username }) => {
+        return html + `<p>${score} ${username}</p>`;
+    }, '');
 }
 
 function draw() {
@@ -87,3 +125,35 @@ function gameLoop() {
 }
 
 gameLoop();
+
+
+
+
+// const client = new tmi.Client({
+//     connection: {
+//         secure: true,
+//         reconnect: true
+//     },
+//     channels: ['trymacs']
+// });
+
+// client.connect();
+
+// client.on('message', (channel, { emotes, username }, message) => {
+//     if (message.startsWith('!drop')) {
+//         if (currentUsers[username]) return;
+//         const args = message.split(' ');
+//         args.shift();
+//         const url = args.length ? args[0].trim() : '';
+//         if (emotes) {
+//             const emoteIds = Object.keys(tags.emotes);
+//             const emote = emoteIds[Math.floor(Math.random() * emoteIds.length)];
+//             doDrop({
+//                 url: `https://static-cdn.jtvnw.net/emoticons/v1/${emote}/2.0`,
+//                 username: tags.username
+//             });
+//         } else {
+//             console.log(username, url);
+//         }
+//     }
+// });
