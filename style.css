@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #333;
+}
+
+h4 {
+    padding: 0;
+    margin: 0;
+}
+
+.leader-board {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    padding: 0.75rem;
+}
+
+.relbutton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.spawn,
+.reload {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    margin: 20px;
+    font-size: 30px;
+    font-family: sans-serif;
+    font-weight: 100;
+    cursor: pointer;
+    border-radius: 20px;
+    border: none;
+}
+
+.target {
+    position: fixed;
+    bottom: -230px;
+    left: 50%;
+    transform: translateX(-50%) scaleY(0.9);
+}
+
+.drop {
+    position: fixed;
+    width: 150px;
+    display: inline-block;
+    transform: rotate(10deg);
+    animation: sway 1s infinite alternate ease-in-out;
+}
+
+.drop.landed {
+    transform: rotate(0deg);
+    animation: none;
+}
+
+.drop.landed .chute {
+    transform: scale(0);
+    animation: shrink 1s ease-in-out;
+}
+
+.drop .chute {
+    width: 100%;
+}
+
+.drop .user-image {
+    display: block;
+    margin: 0 auto;
+    width: 56px;
+    height: 56px;
+    margin-top: -20px;
+}
+
+.drop .avatar {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+@keyframes sway {
+    0% {
+        transform: rotate(-10deg);
+    }
+    100% {
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes shrink {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
