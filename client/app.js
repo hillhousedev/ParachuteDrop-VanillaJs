@@ -5,6 +5,13 @@ const drops = [];
 const currentUsers = {};
 let highScores = [];
 
+const spawnbutton = document.querySelector('#spawn');
+const reloadbutton = document.querySelector('#reload');
+
+
+spawnbutton.addEventListener('click', spawnMore);
+reloadbutton.addEventListener('click', reloadPage);
+
 
 function createDropElement(url, isAvatar = false) {
     const div = document.createElement('div');
@@ -78,7 +85,7 @@ function update() {
                 console.log('Target hit!', drop);
                 const finalScore = (1 - (score / targetHalfWidth)) * 100;
                 console.log(finalScore);
-                leaderBoard.style.display = 'block';
+                //leaderBoard.style.display = 'block';
                 // highScores.push({
                 //     username: drop.username,
                 //     score: finalScore
@@ -125,6 +132,17 @@ function gameLoop() {
 }
 
 gameLoop();
+
+function spawnMore(event) {
+    console.log("Button clicked, and this is the event: ", event);
+    // Reload game
+    emotes.forEach(doDrop)
+        //location.reload();
+}
+
+function reloadPage(event) {
+    location.reload();
+}
 
 
 
